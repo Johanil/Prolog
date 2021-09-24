@@ -12,7 +12,7 @@ game(no):-
   write('Thanks for a good game!'),nl.
 
 game(yes):-
-  read_Word(Word1),
+  read_word(Word1),
   read_guess(Word2),
   play(Word1,Word2),
   write('Once more?'),nl,
@@ -40,10 +40,10 @@ read_word(List):-
 % to a list with the corresponding letters. 
 % This recursive program utilises the built-in predicate name/2
 letters([],[]).
-letters([A],Z):-
-    name(A,Z).
+letters([A],[W|Z]):-
+    name(A,W).
 letters([Z|X],[E|Y]):-
-    name(E,Z),
+    name(E,[Z]),
     letters(X,Y).
 
 % read_guess(-List) reads the word the player guesses 
@@ -88,7 +88,7 @@ same_placing([Z|Word1],[Y|Word2],['*'|Starlist]):- same_placing(Word1,Word2,Star
 % will check the guessed letters that can be found in the  
 % correct word but not in the right position
 
-included_but_not_same_placing(Word1,Word2,List):-
+included_but_not_same_placing(Word1,Word2,List).
     
 included_but_not_same_placing([X|Word1],Word2,[X|Starlist]):-
     member(E,Word2),
@@ -101,6 +101,7 @@ included_but_not_same_placing([E|Word1],Word2, [Starlist]):-
 
 % output(+Starlist,+List) should write the message to  
 % player presenting the result.
+output(Starlist,[]):-
+    write(Starlist).
 
-output(Starlist,[]):-..................
 
