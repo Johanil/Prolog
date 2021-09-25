@@ -39,6 +39,8 @@ read_word(List):-
 % letters(+AsciList,-LetterList) translates an ascii list  
 % to a list with the corresponding letters. 
 % This recursive program utilises the built-in predicate name/2
+
+%DENNA BEHÖVER ORDNAS FUNKAR BARA NÄR ANTALET BOKSTÄVER ÄR SAMMA
 letters([],[]).
 letters([A],[W|Z]):-
     name(A,W).
@@ -80,15 +82,9 @@ play(Word1,Word2):-
 % the Starlist will be: [*,*,*,*,e,r]
 same_placing([],[],[]).
 same_placing([],A,[]).
-same_placing(A,A,Y),
-name(A,Y).
-same_placing([X|Word1],[X|Word2],[Y|Starlist]):- 
-    name(X,Y),
-    same_placing(Word1,Word2,Starlist).
-same_placing([Z|Word1],[Y|Word2],[*|Starlist]):- 
-    same_placing(Word1,Word2,Starlist).
-same_placing([W|Word1],[],[*|Starlist]):- 
-    same_placing(Word1,[],Starlist).
+same_placing(A,A,A).
+same_placing([X|Word1],[X|Word2],[X|Starlist]):- same_placing(Word1,Word2,Starlist).
+same_placing([Z|Word1],[Y|Word2],['*'|Starlist]):- same_placing(Word1,Word2,Starlist),!.
 
 % included_but_not_same_placing(+Word1,+Word2,-List) 
 % will check the guessed letters that can be found in the  
