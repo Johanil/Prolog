@@ -30,7 +30,8 @@ game(X):-
 % the atom to a list of letters 
 
 read_word(List):-
-  write('The game leader gives its word'),nl,
+  write('The game leader gives its word'),
+  nl,
   read(Word),
   name(Word,CharList),
   letters(CharList,List).
@@ -39,11 +40,9 @@ read_word(List):-
 % letters(+AsciList,-LetterList) translates an ascii list  
 % to a list with the corresponding letters. 
 % This recursive program utilises the built-in predicate name/2
-
-%DENNA BEHÖVER ORDNAS FUNKAR BARA NÄR ANTALET BOKSTÄVER ÄR SAMMA
 letters([],[]).
-letters([A],[W|Z]):-
-    name(A,W).
+letters([A],[Z]):-
+    name(Z,[A]).
 letters([Z|X],[E|Y]):-
     name(E,[Z]),
     letters(X,Y).
@@ -74,6 +73,7 @@ play(Word1,Word2):-
   play(Word1,NewWord).
 
 
+
 % same_placing(+Word1,+Word2,-Starlist)  
 % checks for the letters that have the right placing.  
 % The predicate produces a list with stars for positions where the letters are 
@@ -82,14 +82,23 @@ play(Word1,Word2):-
 % the Starlist will be: [*,*,*,*,e,r]
 same_placing([],[],[]).
 same_placing([],A,[]).
-same_placing(A,A,A).
-same_placing([X|Word1],[X|Word2],[X|Starlist]):- same_placing(Word1,Word2,Starlist).
-same_placing([Z|Word1],[Y|Word2],['*'|Starlist]):- same_placing(Word1,Word2,Starlist),!.
 
+same_placing([X|Word1],[X|Word2],[Y|Starlist]):- 
+    name(Y,[X]),
+    same_placing(Word1,Word2,Starlist).
+
+same_placing([Z|Word1],[Y|Word2],[*|Starlist]):- 
+    same_placing(Word1,Word2,Starlist).
+
+same_placing([W|Word1],[],[*|Starlist]):- 
+    same_placing(Word1,[],Starlist).
 % included_but_not_same_placing(+Word1,+Word2,-List) 
 % will check the guessed letters that can be found in the  
 % correct word but not in the right position
+member(X,[X|List]).
+member(X,[E|List]):- member(X,List).
 
+    
 included_but_not_same_placing(Word1,Word2,List).
     
 included_but_not_same_placing([X|Word1],Word2,[X|Starlist]):-
@@ -103,7 +112,6 @@ included_but_not_same_placing([E|Word1],Word2, [Starlist]):-
 
 % output(+Starlist,+List) should write the message to  
 % player presenting the result.
-output(Starlist,[]):-
-    write(Starlist).
 
+output(Starlist,[]):- write(Starlist).
 
