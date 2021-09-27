@@ -97,21 +97,36 @@ same_placing([W|Word1],[],[*|Starlist]):-
 % correct word but not in the right position
 member(X,[X|List]).
 member(X,[E|List]):- member(X,List).
+members([],X,[]).
+members([X|Rest],List,[X|Output]):-
+    member(X,List),!,
+    members(Rest,List,Output).
 
-    
-included_but_not_same_placing(Word1,Word2,List).
-    
-included_but_not_same_placing([X|Word1],Word2,[X|Starlist]):-
-    member(E,Word2),
-    included_but_not_same_placing(Word1,Word2,Starlist).
+members([X|Rest],List,Output):-
+    members(Rest,List,Output).
 
-included_but_not_same_placing([E|Word1],Word2, [Starlist]):-
-    \+ member(E,Word2),
-    included_but_not_same_placing(Word1,Word2,Starlist).
+not_in_starlist(X,[],[]).
+not_in_starlist([],[X],[X]).
+not_in_starlist([],[],[]).
+
+not_in_starlist(Starlist,[X|Rest],[X|NList]):-
+    \+member(X,Starlist),
+    not_in_starlist(Starlist,Rest,NList).
+not_in_starlist(Starlist,[X|Rest],NList):-
+    member(X,Starlist),
+    not_in_starlist(Starlist,Rest,NList).
+not_in_starlist([],[X|Rest],[X|NList]):-
+    not_in_starlist([],Rest,NList).
+    
+included_but_not_same_placing(Correct,Guess,Remainder):-
+    same_placing(Correct,Guess,Starlist),
+    not_in_starlist(Starlist,Correct,NotInStarList),
+    members(Guess,NotInStarList,Remainder).
+
 
 
 % output(+Starlist,+List) should write the message to  
 % player presenting the result.
 
-output(Starlist,[]):- write(Starlist).
+output(Starlist,List):- write(Starlist),write(List).
 
