@@ -117,7 +117,7 @@ not_in_starlist(Starlist,[X|Rest],NList):-
     not_in_starlist(Starlist,Rest,NList).
 not_in_starlist([],[X|Rest],[X|NList]):-
     not_in_starlist([],Rest,NList).
-    
+
 included_but_not_same_placing(Correct,Guess,Remainder):-
     same_placing(Correct,Guess,Starlist),
     not_in_starlist(Starlist,Correct,NotInStarList),
@@ -127,6 +127,11 @@ included_but_not_same_placing(Correct,Guess,Remainder):-
 
 % output(+Starlist,+List) should write the message to  
 % player presenting the result.
+output(Starlist,[]):- 
+    write(Starlist),nl.
 
-output(Starlist,List):- write(Starlist),write(List).
+output(Starlist,List):- 
+    write(Starlist),write('        Occurring letters:'),
+    write(List),nl.
+
 
